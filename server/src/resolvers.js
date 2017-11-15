@@ -7,6 +7,80 @@ import {
 } from './logic';
 
 export const Resolvers = {
+<<<<<<< HEAD
+=======
+  Query: {
+    user(_, args, ctx) {
+      return userHandler.query(_, args, ctx);
+    },
+    device(_, args, ctx) {
+      return deviceHandler.query(_, args, ctx);
+    }
+  },
+  Mutation: {
+    createGroup(_, args, ctx) {
+      return groupHandler.createGroup(_, args, ctx);
+    },
+    addUserToGroup(_, args, ctx) {
+      return groupHandler.addUserToGroup(_, args, ctx);
+    },
+    createUser(_, args, ctx) {
+      console.log(args);
+      return userHandler.createUserX(_, args, ctx);
+    },
+    updateLocation(_, args, ctx) {
+      return locationHandler.updateLocation(_, args, ctx);
+    },
+    signup(_, signinUserInput, ctx) {
+      const { deviceId, email, username, password } = signinUserInput.user;
+      // find user by email
+      return User.findOne({ where: { email } }).then((existing) => {
+        if (!existing) {
+          // hash password and create user
+          return bcrypt.hash(password, 10).then(hash => User.create({
+            email,
+            password: hash,
+            username: username,
+            version: 1,
+          })).then((user) => {
+            user.setOrganisation(1); //default org for now
+            deviceHandler.addDevice(user, deviceId);
+            const { id } = user;
+            const token = jwt.sign({ id, device: deviceId, email, version: 1 }, JWT_SECRET);
+            user.authToken = token;
+            ctx.user = Promise.resolve(user);
+            return user;
+          });
+        }
+
+        return Promise.reject('email already exists'); // email already exists
+      });
+    },
+    login(_, authInput, ctx) {
+      const { username, password, deviceId } = authInput.user;
+      return User.findOne({ where: { username } }).then((user) => {
+        if (!user){
+          return Promise.reject("No Auth for you");
+        }
+        deviceHandler.addDevice(user, deviceId);
+        const token = jwt.sign({
+          id: user.id,
+          device: deviceId,
+          email: user.email,
+          version: user.version
+        }, JWT_SECRET);
+        console.log(token);
+        user.authToken = token;
+        ctx.user = Promise.resolve(user);
+        return user;
+      });
+    },
+    createSchedule(_, args, ctx) {
+      console.log(args);
+      return scheduleHandler.createSchedule(_, args, ctx);
+    }
+  },
+>>>>>>> whitespace removal
   Group: {
     users(group, args, ctx) {
       return groupHandler.users(group, args, ctx);
