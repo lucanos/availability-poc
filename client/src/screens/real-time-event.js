@@ -3,7 +3,27 @@ import React, { Component } from 'react';
 import { Button, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 
+import { extendAppStyleSheet } from './style-sheet';
+
+const styles = extendAppStyleSheet({
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  actionContainer: {
+    margin: 10,
+  },
+  buttonContainer: {
+    flex: 1,
+    marginBottom: 10,
+  },
+});
+
 class RealTimeEvent extends Component {
+  static navigationOptions = {
+    title: 'Real-time Event',
+  };
+
   constructor(props) {
     super(props);
 
@@ -74,8 +94,10 @@ class RealTimeEvent extends Component {
     }
 
     return (
-      <View>
-        {actions}
+      <View style={styles.container}>
+        <View style={styles.actionContainer}>
+          {actions}
+        </View>
       </View>
     );
   }
@@ -89,13 +111,17 @@ RealTimeEvent.propTypes = {
 
 const InitialActions = ({ attendingSite, attendingHQ, unavailable }) => (
   <View>
-    <View>
-      <Button title="Site" onPress={attendingSite} />
-      <Button title="HQ" onPress={attendingHQ} />
+    <Text>I will attend&hellip;</Text>
+    <View style={styles.buttonRow}>
+      <View style={styles.buttonContainer}>
+        <Button title="HQ" onPress={attendingSite} color="#44A020" />
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button title="Site" onPress={attendingHQ} color="#44A020" />
+      </View>
     </View>
-    <Button title="I'm unavailable" onPress={unavailable} />
-  </View>
-);
+    <Button title="I'm unavailable" onPress={unavailable} color="#930000" />
+  </View>);
 
 InitialActions.propTypes = {
   attendingSite: PropTypes.func,
@@ -105,11 +131,15 @@ InitialActions.propTypes = {
 
 const EnRouteActions = ({ arrived, updateEta, cancel }) => (
   <View>
-    <View>
-      <Button title="Update my ETA" onPress={updateEta} />
-      <Button title="I&apos;ve arrived" onPress={arrived} />
+    <View style={styles.buttonRow}>
+      <View style={styles.buttonContainer}>
+        <Button title="Update my ETA" onPress={updateEta} />
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button title="I&apos;ve arrived" onPress={arrived} color="#44A020" />
+      </View>
     </View>
-    <Button title="Cancel attendance" onPress={cancel} />
+    <Button title="Cancel attendance" onPress={cancel} color="#930000" />
   </View>
 );
 
@@ -121,7 +151,7 @@ EnRouteActions.propTypes = {
 
 const CheckedInActions = ({ checkOut }) => (
   <View>
-    <Button title="I've left" onPress={checkOut} />
+    <Button title="I've left" onPress={checkOut} color="#930000" />
   </View>
 );
 
