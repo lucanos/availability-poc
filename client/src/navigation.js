@@ -5,13 +5,14 @@ import { connect } from 'react-redux';
 import update from 'immutability-helper';
 import { REHYDRATE } from 'redux-persist/constants';
 
-import Home from './screens/home.screen';
-import Groups from './screens/groups.screen';
 import Events from './screens/events.screen';
-import Schedules from './screens/schedules.screen';
-import Signin from './screens/signin.screen';
-import Settings from './screens/settings.screen';
+import Groups from './screens/groups.screen';
+import Home from './screens/home.screen';
 import NewGroup from './screens/new-group.screen';
+import RealTimeEvent from './screens/real-time-event';
+import Schedules from './screens/schedules.screen';
+import Settings from './screens/settings.screen';
+import Signin from './screens/signin.screen';
 
 const tabBarConfiguration = {
   tabBarPosition: 'bottom',
@@ -42,6 +43,7 @@ const AppNavigator = StackNavigator({
   Main: { screen: MainScreenNavigator },
   Signin: { screen: Signin },
   NewGroup: { screen: NewGroup },
+  RealTimeEvent: { screen: RealTimeEvent },
 }, {
   mode: 'modal',
 });
