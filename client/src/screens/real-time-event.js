@@ -1,11 +1,16 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Button, Text, View } from 'react-native';
+import MapView from 'react-native-maps';
 import { connect } from 'react-redux';
 
 import { extendAppStyleSheet } from './style-sheet';
 
 const styles = extendAppStyleSheet({
+  map: {
+    flex: 1,
+    height: 200,
+  },
   buttonRow: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -30,6 +35,20 @@ class RealTimeEvent extends Component {
     this.state = {
       attending: false,
       checkedIn: false,
+      respondees: [
+        {
+          attending: 'site',
+          checkedIn: true,
+        },
+        {
+          attending: 'site',
+          checkedIn: false,
+        },
+        {
+          attending: 'hq',
+          checkedIn: false,
+        },
+      ],
     };
 
     this.onAttendingSite = this.onAttendingSite.bind(this);
@@ -93,8 +112,15 @@ class RealTimeEvent extends Component {
       );
     }
 
+    // Get the number of people en-route and there.
+    const { respondees } = this.state;
+    const checkedInCount = respondees.filter(r => r.checkedIn).length;
+    const enRouteCount = respondees.length - checkedInCount;
+
     return (
       <View style={styles.container}>
+        <Text>Attending: {checkedInCount} checked in, {enRouteCount} en-route</Text>
+        <MapView style={styles.map} />
         <View style={styles.actionContainer}>
           {actions}
         </View>
