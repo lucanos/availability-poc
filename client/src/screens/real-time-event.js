@@ -7,6 +7,19 @@ import { connect } from 'react-redux';
 import { extendAppStyleSheet } from './style-sheet';
 
 const styles = extendAppStyleSheet({
+  titleContainer: {
+    backgroundColor: '#FFCCCD',
+    paddingHorizontal: 10,
+    paddingVertical: 20,
+  },
+  title: {
+    color: '#000',
+    fontSize: 20,
+  },
+  attending: {
+    padding: 10,
+    textDecorationLine: 'underline',
+  },
   map: {
     flex: 1,
     height: 200,
@@ -33,6 +46,8 @@ class RealTimeEvent extends Component {
     super(props);
 
     this.state = {
+      title: 'Very Urgent Super Emergency',
+      address: '93-99 Burelli St, Wollongong NSW 2500',
       attending: false,
       checkedIn: false,
       respondees: [
@@ -119,7 +134,13 @@ class RealTimeEvent extends Component {
 
     return (
       <View style={styles.container}>
-        <Text>Attending: {checkedInCount} checked in, {enRouteCount} en-route</Text>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>{this.state.title}</Text>
+          <Text style={styles.address}>{this.state.address}</Text>
+        </View>
+        <Text style={styles.attending}>
+          Attending: {checkedInCount} checked in, {enRouteCount} en-route&hellip;
+        </Text>
         <MapView style={styles.map} />
         <View style={styles.actionContainer}>
           {actions}
