@@ -1,11 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import {
-  FlatList,
   ActivityIndicator,
   Button,
-  Image,
-  StyleSheet,
+  FlatList,
   Text,
   TouchableHighlight,
   View,
@@ -137,11 +135,12 @@ Event.propTypes = {
 class Events extends Component {
   static navigationOptions = {
     title: 'Events',
-    tabBarIcon: ({ tintColor}) => <Icon size={26} name={'bullhorn'} color={tintColor} />
+    tabBarIcon: ({ tintColor }) => <Icon size={26} name={'bullhorn'} color={tintColor} />
   };
 
   constructor(props) {
     super(props);
+    this.showRealTime = this.showRealTime.bind(this);
     this.goToEvent = this.goToEvent.bind(this);
     this.goToNewEvent = this.goToNewEvent.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
@@ -163,6 +162,10 @@ class Events extends Component {
     navigate('NewEvent');
   }
 
+  showRealTime() {
+    this.props.navigation.navigate('RealTimeEvent');
+  }
+
   renderItem = ({ item }) => <Event event={item} goToEvent={this.goToEvent} />;
 
   render() {
@@ -180,6 +183,7 @@ class Events extends Component {
     if (user && !user.events.length) {
       return (
         <View style={styles.container}>
+          <Button title="Real-time event screen" onPress={this.showRealTime} />
           <Header onPress={this.goToNewEvent} />
           <Text style={styles.warning}>{'You do not have any events.'}</Text>
         </View>
@@ -189,6 +193,7 @@ class Events extends Component {
     // render list of events for user
     return (
       <View style={styles.container}>
+        <Button title="Real-time event screen" onPress={this.showRealTime} />
         <FlatList
           data={user.events}
           keyExtractor={this.keyExtractor}
