@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Button, Text, View, Dimensions } from 'react-native';
 import MapView from 'react-native-maps';
 import { connect } from 'react-redux';
+import ResponderMarker from './responder-marker';
 
 import { extendAppStyleSheet } from './style-sheet';
 
@@ -51,6 +52,7 @@ class RealTimeEvent extends Component {
     super(props);
 
     this.state = {
+      id: '004001',
       title: 'Very Urgent Super Emergency',
       address: '93-99 Burelli St, Wollongong NSW 2500',
       location: {
@@ -65,6 +67,7 @@ class RealTimeEvent extends Component {
         {
           id: '4008001',
           name: 'Aaron Spratt',
+          callsign: 'WOL1-3',
           attending: 'site',
           checkedIn: true,
           location: {
@@ -85,6 +88,7 @@ class RealTimeEvent extends Component {
         {
           id: '4008002',
           name: 'Luke Quinane',
+          callsign: 'WOL969',
           attending: 'hq',
           checkedIn: false,
           location: {
@@ -161,6 +165,22 @@ class RealTimeEvent extends Component {
     const checkedInCount = respondees.filter(r => r.checkedIn).length;
     const enRouteCount = respondees.length - checkedInCount;
 
+    // Build up a set of markers to show on the map, first the incident
+    let markers = [
+      <MapView.Marker
+        key={this.state.id}
+        identifier={this.state.id}
+        coordinate={this.state.location}
+        pinColor='#2222cc'
+      />];
+
+    // Add all the responders
+    markers = markers.concat(respondees.map((responder) => (
+      <MapView.Marker key={responder.id} coordinate={responder.location}>
+        <ResponderMarker responder={responder} />
+      </MapView.Marker>
+    )));
+
     return (
       <View style={styles.container}>
         <View style={styles.titleContainer}>
@@ -172,15 +192,7 @@ class RealTimeEvent extends Component {
         </Text>
 
         <MapView style={styles.map} showsuserlocation={true} initialRegion={this.state.location}>
-        {
-          this.state.respondees.map((responder) => (
-            <MapView.Marker
-              key={responder.id}
-              identifier={responder.id}
-              coordinate={responder.location}
-            />
-          ))
-        }
+        {markers}
         </MapView>
 
         <View style={styles.actionContainer}>
