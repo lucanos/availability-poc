@@ -1,10 +1,15 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Button, Text, View } from 'react-native';
+import { Button, Text, View, Dimensions } from 'react-native';
 import MapView from 'react-native-maps';
 import { connect } from 'react-redux';
 
 import { extendAppStyleSheet } from './style-sheet';
+
+const { width, height } = Dimensions.get('window');
+const ASPECT_RATIO = width / height;
+const LATITUDE_DELTA = 0.0922;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const styles = extendAppStyleSheet({
   titleContainer: {
@@ -48,20 +53,44 @@ class RealTimeEvent extends Component {
     this.state = {
       title: 'Very Urgent Super Emergency',
       address: '93-99 Burelli St, Wollongong NSW 2500',
+      location: {
+        latitude: -34.426760,
+        longitude: 150.890017,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
+      },
       attending: false,
       checkedIn: false,
       respondees: [
         {
+          id: '4008001',
+          name: 'Aaron Spratt',
           attending: 'site',
           checkedIn: true,
+          location: {
+            latitude: -34.418400,
+            longitude: 150.887577,
+          }
         },
         {
+          id: '7008001',
+          name: 'Andrew Short',
           attending: 'site',
           checkedIn: false,
+          location: {
+            latitude: -34.461890,
+            longitude: 150.833565,
+          }
         },
         {
+          id: '4008002',
+          name: 'Luke Quinane',
           attending: 'hq',
           checkedIn: false,
+          location: {
+            latitude: -34.341738,
+            longitude: 150.907313,
+          }
         },
       ],
     };
@@ -141,7 +170,19 @@ class RealTimeEvent extends Component {
         <Text style={styles.attending}>
           Attending: {checkedInCount} checked in, {enRouteCount} en-route&hellip;
         </Text>
-        <MapView style={styles.map} />
+
+        <MapView style={styles.map} showsuserlocation={true} initialRegion={this.state.location}>
+        {
+          this.state.respondees.map((responder) => (
+            <MapView.Marker
+              key={responder.id}
+              identifier={responder.id}
+              coordinate={responder.location}
+            />
+          ))
+        }
+        </MapView>
+
         <View style={styles.actionContainer}>
           {actions}
         </View>
