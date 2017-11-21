@@ -72,16 +72,19 @@ const creators = {
     });
   },
 
-  group: ({ name, user }) => {
+  group: ({ name, user, organisation }) => {
     if (!user) {
       return Promise.reject(Error('Must pass user'));
+    }
+    if (!organisation) {
+      return Promise.reject(Error('Must pass organisation'));
     }
     return Group.create({
       name,
     }).then(group =>
       group.addUser(user)
         .then(() => group),
-    );
+    ).then(group => group.setOrganisation(organisation));
   },
 
   user: ({ id, username, password, email, version, organisation }) => {
