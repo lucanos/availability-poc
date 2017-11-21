@@ -87,6 +87,7 @@ class Group extends Component {
 
   render() {
     const { id, name } = this.props.group;
+    console.log(this.myGroups)
     const tags = (this.props.group.tags.map((elem) => {return '#'+elem.name})).join(',')
     //color the already subscribed groups green
     let iHaveDisAlready = false
@@ -168,7 +169,6 @@ class AllGroups extends Component {
 
   render() {
     const { loading, user, networkStatus } = this.props;
-    console.log(user)
     // render loading placeholder while we fetch messages
     if (loading || !user) {
       return (
