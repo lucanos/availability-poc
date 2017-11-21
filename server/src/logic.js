@@ -229,12 +229,12 @@ export const groupHandler = {
     );
   },
   addUserToGroup(_, args, ctx) {
-    return getAuthenticatedUser(ctx).then(() =>
+    return getAuthenticatedUser(ctx).then((user) =>
       Group.findById(args.groupUpdate.groupId).then((group) => {
         if (!group) {
           return Promise.reject('Invalid group!');
         }
-        return User.findById(args.groupUpdate.userId).then((user) => {
+        return User.findById(user.id).then((user) => {
           if (!user) {
             return Promise.reject('Invalid user!');
           }
