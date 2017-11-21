@@ -16,7 +16,6 @@ export const Schema = [`
 
   input CreateGroupInput {
     name: String!
-    organisation: Int!
   }
 
   input LoginInput {
@@ -39,6 +38,7 @@ export const Schema = [`
 
   input AddUserToGroupInput {
     groupId: Int!
+    userId: Int
   }
 
   input CreateUserInput {
