@@ -160,7 +160,7 @@ class AllGroups extends Component {
   renderItem = ({ item }) => <Group group={item} myGroups={this.props.user.groups} joinGroup={this.joinGroup} joinGroupQuery={this.props.groupUpdate}/>;
 
   joinGroup(group) {
-    this.props.joinGroupQuery({group_id:group.id}).then((result) => {
+    this.props.joinGroupQuery({groupId:group.id}).then((result) => {
       alert('joined - '+group.name)
     })
 
@@ -168,6 +168,7 @@ class AllGroups extends Component {
 
   render() {
     const { loading, user, networkStatus } = this.props;
+    console.log(user)
     // render loading placeholder while we fetch messages
     if (loading || !user) {
       return (
@@ -177,7 +178,7 @@ class AllGroups extends Component {
       );
     }
 
-    if (user && !user.organisation.groups) {
+    if (user && !user.organisation.groups.length) {
       return (
         <View style={styles.container}>
           <Text style={styles.warning}>{'no groups in this org'}</Text>
@@ -246,9 +247,9 @@ const groupsQuery = graphql(ALL_GROUPS_QUERY, {
 
 const joinGroupQuery = graphql(JOIN_GROUP_QUERY, {
   props: ({ mutate }) => ({
-    groupUpdate: ({ group_id}) =>
+    groupUpdate: ({ groupId}) =>
       mutate({
-        variables: { groupUpdate: {group_id} },
+        variables: { groupUpdate: {groupId} },
       }),
   }),
 });
