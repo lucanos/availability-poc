@@ -100,7 +100,7 @@ export const userHandler = {
           email,
           password,
           version: 1,
-          organisation: 1,
+          organisation: 1, //TODO: dont be static
         }),
       )
       .then(
@@ -225,21 +225,27 @@ export const groupHandler = {
   createGroup(_, args, ctx) {
     const { name } = args.group;
     return getAuthenticatedUser(ctx).then(user =>
-      Creators.group({ name, user }),
+      Creators.group({ name, user, organisation: 1 }), //TODO: dont be static
     );
   },
   addUserToGroup(_, args, ctx) {
+    const { userId,groupId } = args.groupUpdate;
     return getAuthenticatedUser(ctx).then((user) =>
-      Group.findById(args.groupUpdate.groupId).then((group) => {
+      Group.findById(groupId).then((group) => {
         if (!group) {
           return Promise.reject('Invalid group!');
         }
-        return User.findById(user.id).then((user) => {
-          if (!user) {
-            return Promise.reject('Invalid user!');
-          }
-          return group.addUser(user).then(() => group);
-        });
+        if (typeof userId != 'undefined') { //use userId if passed
+          return User.findById(userId).then((user) => {
+            if (!user) {
+              return Promise.reject('Invalid user!');
+            }
+          })
+        } else { //otherwise use ctx user
+          return User.findById(user.id).then((user) => {
+            return group.addUser(user).then(() => group);
+          });
+        }
       }),
     );
   },
