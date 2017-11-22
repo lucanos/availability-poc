@@ -46,7 +46,7 @@ const AppNavigator = StackNavigator({
   Signin: { screen: Signin },
   Signin: { screen: Signin },
   NewGroup: { screen: NewGroup },
-  SearchGroup: { screen: SearchGroup},
+  SearchGroup: { screen: SearchGroup },
   Group: { screen: Group},
 }, {
   mode: 'modal',

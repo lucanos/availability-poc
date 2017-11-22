@@ -86,7 +86,6 @@ class Member extends Component {
 
   render() {
     const { id, username } = this.props.member;
-    console.log(this.props)
     return (
       <TouchableHighlight
         key={id}

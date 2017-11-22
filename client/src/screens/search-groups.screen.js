@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import {
   FlatList,
   ActivityIndicator,
+  Alert,
   Button,
   Image,
   StyleSheet,
@@ -87,7 +88,6 @@ class Group extends Component {
 
   render() {
     const { id, name } = this.props.group;
-    console.log(this.myGroups)
     const tags = (this.props.group.tags.map((elem) => {return '#'+elem.name})).join(',')
     //color the already subscribed groups green
     let iHaveDisAlready = false
@@ -158,11 +158,15 @@ class AllGroups extends Component {
 
   keyExtractor = item => item.id;
 
-  renderItem = ({ item }) => <Group group={item} myGroups={this.props.user.groups} joinGroup={this.joinGroup} joinGroupQuery={this.props.groupUpdate}/>;
+  renderItem = ({ item }) =>
+    <Group group={item}
+    myGroups={this.props.user.groups}
+    joinGroup={this.joinGroup}
+    joinGroupQuery={this.props.groupUpdate}/>;
 
   joinGroup(group) {
     this.props.joinGroupQuery({groupId:group.id}).then((result) => {
-      alert('joined - '+group.name)
+      Alert.alert('Group joined',group.name)
     })
 
   }
